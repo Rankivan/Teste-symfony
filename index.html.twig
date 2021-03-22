@@ -1,0 +1,94 @@
+{% extends 'global/global.html.twig' %}
+{% import "components/macro_form_components.html.twig" as forms %}
+
+{% block javascripts %}
+  {{ parent() }}
+  {{ encore_entry_script_tags('gestao-configuracao-teste-index') }}
+{% endblock %}
+
+{% block content %}
+
+  {% set param = {
+    'this': 'Gestão',
+    'home': '/gestao',
+    'trail': {0 : 'Configuração', 1 : 'Teste'},
+    'links': {1 : path('app_gestao_configuracao_teste_index')}
+  } %}
+  {{ forms.subheader(param) }}
+
+  <div class="kt-portlet">
+    {{ forms.head_tittle({ 'head_tittle' : '<i class="fa flaticon-rocket kt-margin-r-10"></i>Teste (Treino)' }) }}
+
+    {% set param = {
+      'attribs': {
+        'id': 'hdn-url-edit',
+        'type': 'hidden',
+        'value': path('app_gestao_configuracao_teste_form', {'id': 'id'}),
+        'disabled': true
+      },
+      'extra': { 'alone': true}
+    } %}
+    {{ forms.input(param) }}
+
+    {% set param = {
+      'attribs': {
+        'id': 'hdn-url-excluir',
+        'type': 'hidden',
+        'value': path('app_gestao_configuracao_teste_excluir'),
+        'disabled': true
+      },
+      'extra': { 'alone': true}
+    } %}
+    {{ forms.input(param) }}
+
+    <div class="kt-portlet__body" id="div_filtros">
+      <div class="kt-section kt-section--first mb-0">
+        <div class="row">
+          <div class="col-md-12">
+            {% set param = {
+              'attribs': { 'label': 'Busca', 'id': 'busca', 'placeholder' : 'Digite aqui para filtrar' }
+            } %}
+            {{ forms.input(param) }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="kt-portlet__foot">
+      <div class="kt-form__actions">
+        {% if verify_user_roles(['ROLE_SUPER_USUARIO']) %}
+          <a id="btn-cadastrar" href="{{ path("app_gestao_configuracao_teste_form") }}" class="btn btn-success" ><i class="la la-plus-circle"></i> Cadastrar</a>
+        {% endif %}
+        <button id="btn-pesquisar" type="button" class="btn btn-brand" ><i class="la la-search"></i> Pesquisar</button>
+        <button id="btn-limpar" type="button" class="btn btn-default"><i class="la la-eraser"></i> Limpar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="kt-portlet">
+    <div class="kt-portlet__head">
+      <div class="kt-portlet__head-label">
+        <h3 class="kt-portlet__head-title">
+          Resultado
+        </h3>
+      </div>
+    </div>
+    <div class="kt-portlet__body">
+      {% set param = {
+        'attribs': {
+          'id'              : 'tabelaTeste',
+          'url'             : path('app_gestao_configuracao_teste_list_ajax'),
+          'functionFilters' : 'window.document.listEvents.queryParamsTesteList',
+          'sort'            : 'desc',
+          'data'            : [
+            {'name': 'Nome do teste', 'field': 'nome','sortable': 'true'},
+            {'name': 'Valor', 'field': 'valor','sortable': 'true'},
+            {'name': 'Ação', 'field': 'acao', 'sortable': 'false', 'formatter': 'window.document.listEvents.acaoFormatter', 'align': 'center'}
+          ]
+        }
+      }
+      %}
+      {{ forms.tableList(param) }}
+    </div>
+  </div>
+
+{% endblock %}

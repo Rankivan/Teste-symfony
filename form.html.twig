@@ -1,0 +1,118 @@
+{% extends 'global/global.html.twig' %}
+{% import "components/macro_form_components.html.twig" as forms %}
+
+{% block javascripts %}
+  {{ parent() }}
+  {{ encore_entry_script_tags('gestao-configuracao-teste-form') }}
+{% endblock %}
+
+{% block content %}
+
+  {% set param = {
+    'this': 'Gestão',
+    'home': path('app_gestao_configuracao_teste_index'),
+    'trail': {0 : 'Configuração', 1 : 'Teste', 3: 'Formulário'}
+  } %}
+  {{ forms.subheader(param) }}
+
+  <div class="kt-portlet">
+
+    {{ forms.head_tittle({ 'head_tittle' : '<i class="fa flaticon-rocket kt-margin-r-10"></i>Cadastro do Teste' }) }}
+
+    <form name="cadastro" id="cadastro" method="POST" class="kt-form">
+
+      {% set param = {
+        'attribs': {
+          'id': 'hdn-url-form',
+          'type': 'hidden',
+          'value': path('app_gestao_configuracao_teste_form')
+        }, 'extra': { 'alone': true}
+      } %}
+      {{ forms.input(param) }}
+
+      {% set param = {
+        'attribs': {
+          'id': 'hdn-url-salvar',
+          'type': 'hidden',
+           'value': path('app_gestao_configuracao_teste_salvar')
+        }, 'extra': { 'alone': true}
+      } %}
+      {{ forms.input(param) }}
+
+      {% set param = {
+        'attribs': {
+          'id': 'testeId',
+          'type': 'hidden',
+           'value': teste ? teste.id : '',
+        }, 'extra': { 'alone': true}
+      } %}
+      {{ forms.input(param) }}
+
+
+      {% set param = {
+        'attribs': {
+          'id': 'hdn-url-index',
+          'type': 'hidden',
+          'value': path('app_gestao_configuracao_teste_index'),
+          'disabled': true
+        },
+        'extra': { 'alone': true}
+      } %}
+      {{ forms.input(param) }}
+
+      <div class="kt-portlet__body mb-1 pb-1">
+        <div class="kt-section kt-section--first">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="row">
+                <div class="col-md-4">
+                  {% set param = {
+                    'attribs': {
+                      'label': 'Nome Teste',
+                      'id': 'nome',
+                      'maxlength': 1000,
+                      'required': true,
+                      'value': teste ? teste.nome : '',
+
+                    }
+                  } %}
+                  {{ forms.input(param) }}
+
+                </div>
+                <div class="col-md-8">
+                  {% set param = {
+                    'attribs': {
+                      'label': 'Valor teste',
+                      'id': 'valor',
+                      'name': 'valor',
+                      'required': true,
+                      'value': teste ? teste.valor : '',
+                    }
+                  } %}
+                  {{ forms.input(param) }}
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="kt-portlet__foot mt-1">
+        <div class="kt-form__actions">
+          <button type="submit" class="btn btn-info">
+            <i class="fas fa-save"></i>Gravar
+          </button>
+
+          {% if parametro.id is not defined %}
+            <a id="btn-limpar" href="{{ path('app_gestao_configuracao_teste_form') }}" class="btn btn-warning"
+               title="Limpar"><i class="la la-eraser"></i> Limpar</a>
+          {% endif %}
+
+          <a id="btn-voltar" href="{{ path('app_gestao_configuracao_teste_index') }}" class="btn btn-secondary"
+             title="Voltar"><i class="la la-backward"></i> Voltar</a>
+        </div>
+      </div>
+    </form>
+  </div>
+
+{% endblock %}
